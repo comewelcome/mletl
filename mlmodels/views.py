@@ -97,3 +97,18 @@ def calculate_metrics(ml_model, X, y, model_type):
     elif model_type == 'clustering':
         metrics['inertia'] = ml_model.inertia_
     return metrics
+
+@login_required 
+def model_delete(request, model_id):
+    model = MLModel.objects.get(id=model_id, dataset__project__user=request.user)
+    
+    # Delete the saved model file if it exists
+    if model.model_file:
+        import os
+        if os.path.exists(model.model_file):
+            os.remove(model.model_file)
+    
+    # Delete the model from database
+    model.delete()
+    
+    return redirect('model_list')
