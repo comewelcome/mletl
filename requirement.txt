@@ -2,3 +2,5 @@ django
 djangorestframework
 pandas
 scikit-learn
+pandas
+numpy

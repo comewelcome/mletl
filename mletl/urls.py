@@ -36,4 +36,9 @@ urlpatterns = [
     path('etl/', include('etl.urls')),
     path('mlmodels/', include('mlmodels.urls')),
     path('api/', include('api.urls')),
+    
+    path('data/', include('etl.urls')),
+    path('models/', include('mlmodels.urls')),
+
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

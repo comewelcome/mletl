@@ -1,0 +1,41 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>ML Models</h2>
+        <a href="{% url 'model_create' %}" class="btn btn-primary">Create New Model</a>
+    </div>
+
+    <div class="row">
+        {% if models %}
+            {% for model in models %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ model.name }}</h5>
+                            <p class="card-text">
+                                Type: {{ model.get_model_type_display }}<br>
+                                Algorithm: {{ model.get_algorithm_display }}<br>
+                                Dataset: {{ model.dataset.name }}<br>
+                                Status: {% if model.trained %}Trained{% else %}Not Trained{% endif %}
+                            </p>
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-success btn-sm">Train</a>
+                                <a href="#" class="btn btn-info btn-sm">View Details</a>
+                                <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    No models available. Start by creating a new model.
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

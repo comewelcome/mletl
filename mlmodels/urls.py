@@ -2,5 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # Les URLs des modèles ML seront ajoutées plus tard
+    path('', views.model_list, name='model_list'),
+    path('create/', views.model_create, name='model_create'),
 ]

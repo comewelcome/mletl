@@ -1,0 +1,134 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Create New ML Model</h2>
+    <form method="POST" action="{% url 'model_create' %}">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="name">Model Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="dataset">Dataset</label>
+            <select class="form-control" id="dataset" name="dataset_id" required>
+                {% for dataset in datasets %}
+                    <option value="{{ dataset.id }}">{{ dataset.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="model_type">Model Type</label>
+            <select class="form-control" id="model_type" name="model_type" required>
+                <option value="regression">Regression</option>
+                <option value="classification">Classification</option>
+                <option value="clustering">Clustering</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="algorithm">Algorithm</label>
+            <select class="form-control" id="algorithm" name="algorithm" required>
+                <!-- Will be populated via JavaScript -->
+            </select>
+        </div>
+
+        <div id="hyperparameters" class="form-group">
+            <!-- Will be populated via JavaScript based on selected algorithm -->
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create and Train Model</button>
+    </form>
+</div>
+
+<script>
+const algorithmsByType = {
+    'regression': ['linear_regression', 'random_forest'],
+    'classification': ['logistic_regression', 'random_forest', 'svm'],
+    'clustering': ['kmeans']
+};
+
+const hyperparametersByAlgorithm = {
+    'linear_regression': [
+        {name: 'fit_intercept', type: 'checkbox', default: true, label: 'Fit Intercept'},
+    ],
+    'logistic_regression': [
+        {name: 'C', type: 'number', default: 1.0, label: 'Regularization (C)'},
+        {name: 'max_iter', type: 'number', default: 100, label: 'Max Iterations'}
+    ],
+    'random_forest': [
+        {name: 'n_estimators', type: 'number', default: 100, label: 'Number of Trees'},
+        {name: 'max_depth', type: 'number', default: 10, label: 'Max Depth'}
+    ],
+    'svm': [
+        {name: 'C', type: 'number', default: 1.0, label: 'Regularization (C)'},
+        {name: 'kernel', type: 'select', options: ['linear', 'rbf', 'poly'], default: 'rbf', label: 'Kernel'}
+    ],
+    'kmeans': [
+        {name: 'n_clusters', type: 'number', default: 3, label: 'Number of Clusters'},
+        {name: 'max_iter', type: 'number', default: 300, label: 'Max Iterations'}
+    ]
+};
+
+document.getElementById('model_type').addEventListener('change', updateAlgorithms);
+document.getElementById('algorithm').addEventListener('change', updateHyperparameters);
+
+function updateAlgorithms() {
+    const modelType = document.getElementById('model_type').value;
+    const algorithmSelect = document.getElementById('algorithm');
+    algorithmSelect.innerHTML = '';
+    
+    algorithmsByType[modelType].forEach(algo => {
+        const option = document.createElement('option');
+        option.value = algo;
+        option.textContent = algo.replace('_', ' ').toUpperCase();
+        algorithmSelect.appendChild(option);
+    });
+    
+    updateHyperparameters();
+}
+
+function updateHyperparameters() {
+    const algorithm = document.getElementById('algorithm').value;
+    const hyperparamsDiv = document.getElementById('hyperparameters');
+    hyperparamsDiv.innerHTML = '<h4>Hyperparameters</h4>';
+    
+    hyperparametersByAlgorithm[algorithm].forEach(param => {
+        const div = document.createElement('div');
+        div.className = 'form-group';
+        
+        const label = document.createElement('label');
+        label.textContent = param.label;
+        div.appendChild(label);
+        
+        if (param.type === 'select') {
+            const select = document.createElement('select');
+            select.className = 'form-control';
+            select.name = `hyperparameters.${param.name}`;
+            param.options.forEach(opt => {
+                const option = document.createElement('option');
+                option.value = opt;
+                option.textContent = opt;
+                select.appendChild(option);
+            });
+            div.appendChild(select);
+        } else {
+            const input = document.createElement('input');
+            input.type = param.type;
+            input.className = 'form-control';
+            input.name = `hyperparameters.${param.name}`;
+            input.value = param.default;
+            div.appendChild(input);
+        }
+        
+        hyperparamsDiv.appendChild(div);
+    });
+}
+
+// Initialize the form
+updateAlgorithms();
+</script>
+{% endblock %}
