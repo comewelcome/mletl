@@ -3,8 +3,8 @@
 {% block content %}
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>ML Models</h2>
-        <a href="{% url 'model_create' %}" class="btn btn-primary">Create New Model</a>
+        <h2>Modèles ML</h2>
+        <a href="{% url 'model_create' %}" class="btn btn-primary">Créer un nouveau modèle</a>
     </div>
 
     <div class="row">
@@ -15,15 +15,15 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ model.name }}</h5>
                             <p class="card-text">
-                                Type: {{ model.get_model_type_display }}<br>
-                                Algorithm: {{ model.get_algorithm_display }}<br>
-                                Dataset: {{ model.dataset.name }}<br>
-                                Status: {% if model.trained %}Trained{% else %}Not Trained{% endif %}
+                                Type : {{ model.get_model_type_display }}<br>
+                                Algorithme : {{ model.get_algorithm_display }}<br>
+                                Jeu de données : {{ model.dataset.name }}<br>
+                                Statut : {% if model.trained %}Entraîné{% else %}Non Entraîné{% endif %}
                             </p>
                             <div class="btn-group">
-                                <a href="#" class="btn btn-success btn-sm">Train</a>
-                                <a href="#" class="btn btn-info btn-sm">View Details</a>
-                                <a href="{% url 'model_delete' model.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this model?')">Delete</a>
+                                <a href="#" class="btn btn-success btn-sm">Entraîner</a>
+                                <a href="#" class="btn btn-info btn-sm">Voir les détails</a>
+                                <a href="{% url 'model_delete' model.id %}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce modèle ?')">Supprimer</a>
                             </div>
                         </div>
                     </div>
@@ -32,7 +32,7 @@
         {% else %}
             <div class="col-12">
                 <div class="alert alert-info">
-                    No models available. Start by creating a new model.
+                    Aucun modèle disponible. Commencez par créer un nouveau modèle.
                 </div>
             </div>
         {% endif %}
