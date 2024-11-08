@@ -46,3 +46,19 @@ def dataset_upload(request):
     # GET request - show upload form
     projects = Project.objects.filter(user=request.user)
     return render(request, 'etl/dataset_upload.html', {'projects': projects})
+
+
+@login_required
+def dataset_delete(request, dataset_id):
+    dataset = Dataset.objects.get(id=dataset_id, project__user=request.user)
+    
+    # Delete the physical file if it exists
+    if dataset.file:
+        import os
+        if os.path.exists(dataset.file.path):
+            os.remove(dataset.file.path)
+    
+    # Delete the dataset from database
+    dataset.delete()
+    
+    return redirect('dataset_list')
