@@ -1,6 +1,8 @@
 # Created by https://www.gitignore.io
 ### donnnees #####
 *.csv
+### modeles ###
+*.joblib
 ### OSX ###
 .DS_Store
 .AppleDouble

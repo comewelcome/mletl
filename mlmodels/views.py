@@ -30,7 +30,12 @@ def model_create(request):
         for key, value in request.POST.items():
             if key.startswith('hyperparameters.'):
                 param_name = key.split('.')[1]
-                hyperparameters[param_name] = value
+                try:
+                    # Convert to int if possible
+                    hyperparameters[param_name] = int(value)
+                except ValueError:
+                    # Keep as string if conversion fails
+                    hyperparameters[param_name] = value
 
         # Create ML model instance
         model = MLModel.objects.create(
@@ -77,7 +82,7 @@ def train_model(model):
     ml_model.fit(X, y)
     
     # Save the trained model
-    model_path = f'ml_models/{model.id}_model.joblib'
+    model_path = f'media/ml_models/{model.id}_model.joblib'
     joblib.dump(ml_model, model_path)
     
     # Update model instance
