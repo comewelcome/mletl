@@ -1,0 +1,36 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Tableau de bord{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4">Tableau de bord</h1>
+        
+        {% if user.is_authenticated %}
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Projets</h5>
+                        <p class="card-text">Gérez vos projets d'analyse de données et de machine learning.</p>
+                        <a href="{% url 'project_list' %}" class="btn btn-primary">Voir les projets</a>
+                        <a href="{% url 'project_create' %}" class="btn btn-success">Nouveau projet</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <h4 class="alert-heading">Bienvenue sur la plateforme ML ETL!</h4>
+            <p>Veuillez vous connecter ou créer un compte pour commencer à utiliser la plateforme.</p>
+            <hr>
+            <p class="mb-0">
+                <a href="{% url 'login' %}" class="btn btn-primary">Se connecter</a>
+                <a href="{% url 'signup' %}" class="btn btn-success">S'inscrire</a>
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
