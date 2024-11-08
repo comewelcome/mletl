@@ -23,7 +23,7 @@ class MLModel(models.Model):
     hyperparameters = models.JSONField(default=dict)
     created_at = models.DateTimeField(auto_now_add=True)
     trained = models.BooleanField(default=False)
-    model_file = models.FileField(upload_to='ml_models/', null=True, blank=True)
+    model_file = models.FileField(upload_to='media/ml_models/', null=True, blank=True)
     metrics = models.JSONField(default=dict)
 
     def __str__(self):
