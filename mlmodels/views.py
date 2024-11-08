@@ -111,9 +111,11 @@ def model_delete(request, model_id):
     # Delete the saved model file if it exists
     if model.model_file:
         import os
-        if os.path.exists(model.model_file):
-            os.remove(model.model_file)
-    
+        
+        model_file_path = str(model.model_file)
+        if os.path.exists(model_file_path):
+            os.remove(model_file_path)
+
     # Delete the model from database
     model.delete()
     
