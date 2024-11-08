@@ -13,7 +13,8 @@ import pandas as pd
 
 @login_required
 def model_list(request):
-    models = MLModel.objects.filter(dataset__project__user=request.user)
+    models = MLModel.objects.filter(dataset__project__user=request.user)#, dataset__project=request.project)
+    # models = MLModel.objects.filter(dataset__project=project)
     return render(request, 'mlmodels/model_list.html', {'models': models})
 
 @login_required
