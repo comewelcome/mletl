@@ -4,12 +4,14 @@ from django.http import JsonResponse
 from .models import MLModel
 from etl.models import Dataset
 import json
-import joblib
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.cluster import KMeans
 import pandas as pd
+import os
+import joblib
+    
 
 @login_required
 def model_list(request):
@@ -56,6 +58,7 @@ def model_create(request):
     return render(request, 'mlmodels/model_create.html', {'datasets': datasets})
 
 def train_model(model):
+
     # Load dataset
     dataset = pd.read_csv(model.dataset.file.path)
     
@@ -82,6 +85,9 @@ def train_model(model):
     ml_model.fit(X, y)
     
     # Save the trained model
+    # cree le dossier media/ml_models/ si il n'est pas la
+    if not os.path.exists('media/ml_models'):
+        os.makedirs('media/ml_models')
     model_path = f'media/ml_models/{model.id}_model.joblib'
     joblib.dump(ml_model, model_path)
     
